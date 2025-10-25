@@ -1,16 +1,10 @@
 #!/bin/bash
-
-# Hemkatalog som ska backas upp
 SOURCE="$HOME/"
-
-# Backupdestination på kamratens maskin
-DEST="user@kamratens-maskin:/home/user/backups"
-
-# Datum för arkivbackup
+REMOTE_USER="simon"
+REMOTE_HOST="192.168.214.32"   # byt till korrekt IP
+REMOTE_DIR="/home/$REMOTE_USER/backup_home"
 DATE=$(date +%Y-%m-%d)
+DELETED_DIR="$REMOTE_DIR/deleted_$DATE"
 
-# Arkivkatalog för gamla filer
-ARCHIVE="$DEST/archive-$DATE"
+rsync -av --delete --backup --backup-dir="$DELETED_DIR" "$SOURCE" "$REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR"
 
-# Rsync-kommando
-rsync -av --delete --backup --backup-dir=$ARCHIVE $SOURCE $DEST/current
